@@ -7,7 +7,7 @@ from __future__ import unicode_literals
 import datetime
 import time
 import urllib
-
+import urllib.parse
 from util.json_util import json_dump
 
 one_week = datetime.timedelta(weeks=1)
@@ -39,12 +39,12 @@ def is_login():  # 判断是否登陆
     return get_url("login")
 
 
-def mc_time_url():  # 获取订餐时间的url
-    return get_url("preorder/basic?{}".format(mc_params({})))
+# def mc_time_url():  # 获取订餐时间的url
+#     return get_url("preorder/basic?{}".format(mc_params({})))
 
 
-def show_me():  # 展示个人信息的url
-    return get_url("preorder/api/v2.1/accounts/show?{}".format(mc_params({})))
+# def show_me():  # 展示个人信息的url
+#     return get_url("preorder/api/v2.1/accounts/show?{}".format(mc_params({})))
 
 
 def calender_items_url():  # 获取日历列表
@@ -80,18 +80,18 @@ def restaurants_url(tab):  # 获取相应的餐厅列表及开放时间
     return get_url("preorder/api/v2.1/restaurants/list?{}".format(mc_params(data)))
 
 
-def recommendations_url(tab):  # 获得推荐列表
-    uid = tab['userTab']['uniqueId']
-    data = {
-        "tabUniqueId": uid,
-        "targetTime": concat_target_time(tab)
-    }
-    return get_url("preorder/api/v2.1/recommendations/dishes?{}".format(mc_params(data)))
+# def recommendations_url(tab):  # 获得推荐列表
+#     uid = tab['userTab']['uniqueId']
+#     data = {
+#         "tabUniqueId": uid,
+#         "targetTime": concat_target_time(tab)
+#     }
+#     return get_url("preorder/api/v2.1/recommendations/dishes?{}".format(mc_params(data)))
 
 
 def order_url(tab, dish_ids, address_uid):  # 下单
     d_str = json_dump(dish_ids)
-    order_string = urllib.quote(d_str)
+    order_string = urllib.parse.quote(d_str)
     data = {
         "corpAddressUniqueId": address_uid,
         "order": order_string,
@@ -102,13 +102,13 @@ def order_url(tab, dish_ids, address_uid):  # 下单
     return get_url("preorder/api/v2.1/orders/add?" + mc_params(data))
 
 
-def cancle_order_url(tab, order_id):  # 取消订单
-    data = {
-        "uniqueId": order_id,
-        "type": "CORP_ORDER",
-        "restoreCart": "false",
-    }
-    return get_url("preorder/api/v2.1/orders/delete?" + mc_params(data))
+# def cancle_order_url(tab, order_id):  # 取消订单
+#     data = {
+#         "uniqueId": order_id,
+#         "type": "CORP_ORDER",
+#         "restoreCart": "false",
+#     }
+#     return get_url("preorder/api/v2.1/orders/delete?" + mc_params(data))
 
 
 def restaurant_dishes_url(tab, restaurant_uid):  # 获取餐厅列表
